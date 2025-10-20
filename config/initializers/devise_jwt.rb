@@ -1,4 +1,3 @@
-# config/initializers/devise_jwt.rb
 Rails.application.config.to_prepare do
   Devise.setup do |config|
     jwt_secret = ENV["DEVISE_JWT_SECRET_KEY"] || Rails.application.credentials.devise_jwt_secret_key
@@ -14,11 +13,6 @@ Rails.application.config.to_prepare do
       jwt.revocation_requests = [
         [ "DELETE", %r{^/api/v1/auth/sign_out$} ]
       ]
-
-      # DO NOT set jwt.revocation_strategy here — use the model-level config:
-      #   devise :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
-      # Setting revocation_strategy on this config can trigger Dry::Configurable errors
-      # in some gem versions/contexts.
     end
   end
 end
