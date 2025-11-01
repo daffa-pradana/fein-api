@@ -12,6 +12,12 @@ Rails.application.routes.draw do
       post "auth/sign_in", to: "sessions#create"
       delete "auth/sign_out", to: "sessions#destroy"
       post "auth/sign_up", to: "registrations#create"
+
+      # user
+      get "users/me", to: "users#show"
+      patch "users/me", to: "users#update"
+      patch "users/me/email", to: "users#update_email"
+      patch "users/me/password", to: "users#update_password"
     end
   end
 end
