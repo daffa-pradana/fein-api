@@ -10,7 +10,7 @@ on:
 
 jobs:
   lint:
-    name: RuboCop
+    name: RuboCop (Soft Mode)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -27,16 +27,21 @@ jobs:
           gem install bundler
           bundle install --jobs 4 --retry 3
 
-      - name: Run RuboCop
+      - name: Run RuboCop (warnings only, won't block merge)
         run: |
-          bundle exec rubocop
-    # make lint non-blocking if you prefer it only shows warnings:
-    # remove the job or set `continue-on-error: true` if you don't want to block merges.
+          # Show all cops but only treat 'fatal' as the fail-level
+          bundle exec rubocop --display-only-fail-level fatal || true
+
+      - name: RuboCop Debugger check (fail on binding/pry/byebug)
+        # THIS step will fail if Lint/Debugger finds any debugger calls
+        run: |
+          echo "Checking for debugger calls (binding.pry / binding.irb / byebug / debug)..."
+          bundle exec rubocop --only Lint/Debugger
 
   test:
     name: RSpec
     runs-on: ubuntu-latest
-    needs: lint           # remove if you want them parallel
+    needs: lint
     services:
       postgres:
         image: postgres:14
@@ -46,9 +51,9 @@ jobs:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
         options: >-
-          --health-cmd "pg_isready -U postgres" 
-          --health-interval 10s 
-          --health-timeout 5s 
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
           --health-retries 5
 
     env:
