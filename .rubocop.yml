@@ -1,8 +1,15 @@
-# Omakase Ruby styling for Rails
-inherit_gem: { rubocop-rails-omakase: rubocop.yml }
+AllCops:
+  TargetRubyVersion: 3.3
+  NewCops: enable
+  DisplayCopNames: true
+  DisplayStyleGuide: true
 
-# Overwrite or add rules to create your own house style
-#
-# # Use `[a, [b, c]]` not `[ a, [ b, c ] ]`
-# Layout/SpaceInsideArrayLiteralBrackets:
-#   Enabled: false
+# Ensure debugger detection is enabled and treated seriously
+Lint/Debugger:
+  Enabled: true
+  # severity error will cause rubocop --only to exit non-zero
+  Severity: error
+
+# keep other noisy style cops off or adjusted if you want
+Layout/LineLength:
+  Enabled: false
