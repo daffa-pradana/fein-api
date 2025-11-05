@@ -55,6 +55,7 @@ jobs:
       DATABASE_USERNAME: postgres
       DATABASE_PASSWORD: password
       DATABASE_NAME: fein_api_test
+      DEVISE_JWT_SECRET_KEY: dummy_secret_for_ci
 
     steps:
       - name: Checkout code
